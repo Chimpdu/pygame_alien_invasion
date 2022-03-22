@@ -9,6 +9,7 @@ class AlienInvasion:
 		pygame.init()
 		self.screen=pygame.display.set_mode((1200,800))  #pygame.display.set_mode()用于创立一个pygame窗口，输入的是一个tuple（元组）
 		pygame.display.set_caption('Alien Invasion')
+		self.bg_color=(230,230,230)            			 #pygame用RBG格式表示颜色每种色的取值是（0-255）共1600万种颜色 ，（230，230，230）是一种浅灰色
 
 	def run_game(self):
 		"""run the game"""
@@ -17,6 +18,8 @@ class AlienInvasion:
 				if event.type==pygame.QUIT:                    #退出的条件
 					sys.exit()
 			pygame.display.flip()
+			self.screen.fill(self.bg_color)
+			
 if __name__=='__main__':
 	ai=AlienInvasion()
 	ai.run_game()
