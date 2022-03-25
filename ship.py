@@ -13,6 +13,16 @@ class Ship:
 
 		self.rect.midbottom=self.screen_rect.midbottom  #将self.rect的midbottom对应于screen.screen的midbottom以定位
 		                                                #原点在（0，0）在最左上角。使用rect处理数据，通过调整矩形中心和四角的坐标指定其所在位置。使元素居中用center，centerx,centery,与边缘平齐：top，bottom，left，right，其他组合：midbottom,midtop,midleft,midright
+		self.moving_right=False
+		self.moving_left=False	                                                
+
 	def blitme(self):        #定义方法blitme()将图片打印到瑟利夫。rect指定的位置
 		"""print the ship at the designated position"""
 		self.screen.blit(self.image,self.rect)
+
+	def update(self):
+		"""update ship's position when events occurs"""
+		if self.moving_right:
+			self.rect.x+=1
+		if self.moving_left:
+			self.rect.x-=1
