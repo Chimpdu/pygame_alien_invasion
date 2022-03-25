@@ -1,28 +1,39 @@
-#python的优点是可以像处理矩形（rect对象）那样处理一切游戏元素，这样可很快判断他们之间是否发生了碰撞，将屏幕与飞船全作为矩形处理
 import pygame
+from settings import Settings
 class Ship:
 	"""a class for administrating the ship"""
 
-	def __init__(self,ai_game):#ai_game在主文件中被赋值于self，这样可以使主文件的属性与此贯通
+	def __init__(self,ai_game):
 		"""initiate the ship and set their original position"""
-		self.screen=ai_game.screen                  #将屏幕赋给Ship里的一个属性
-		self.screen_rect=ai_game.screen.get_rect()  #用.get_rect()来访问屏幕的rect属性
+		self.screen=ai_game.screen                  
+		self.screen_rect=ai_game.screen.get_rect()  
 
-		self.image=pygame.image.load("images\\ship.bmp")  #使用pygame.image.load()载入图片
-		self.rect=self.image.get_rect()                   #.get_rect()访问ship的rect属性
+		self.image=pygame.image.load("images\\ship.bmp") 
+		self.rect=self.image.get_rect()                   
 
-		self.rect.midbottom=self.screen_rect.midbottom  #将self.rect的midbottom对应于screen.screen的midbottom以定位
-		                                                #原点在（0，0）在最左上角。使用rect处理数据，通过调整矩形中心和四角的坐标指定其所在位置。使元素居中用center，centerx,centery,与边缘平齐：top，bottom，left，right，其他组合：midbottom,midtop,midleft,midright
+		self.rect.midbottom=self.screen_rect.midbottom  
+
 		self.moving_right=False
-		self.moving_left=False	                                                
+		self.moving_left=False	
+		self.moving_up=False
+		self.moving_down=False 
 
-	def blitme(self):        #定义方法blitme()将图片打印到瑟利夫。rect指定的位置
-		"""print the ship at the designated position"""
+		self.x=float(self.rect.x)     #先把rect.x y转化为浮点型
+		self.y=float(self.rect.y)
+		self.settings=Settings()                                              
+
+	def blitme(self):        
 		self.screen.blit(self.image,self.rect)
 
 	def update(self):
 		"""update ship's position when events occurs"""
-		if self.moving_right:
-			self.rect.x+=1
-		if self.moving_left:
-			self.rect.x-=1
+		if self.moving_right and self.rect.right<self.screen_rect.right:  #这些是为了限制飞船的移动距离，千万要记住pygame的坐标是向右下方增大的，所以一定要小心
+			self.x+=self.settings.ship_speed
+		if self.moving_left and self.rect.left>self.screen_rect.left:
+			self.x-=self.settings.ship_speed
+		self.rect.x=self.x              #仔细想，虽然rect.x仍取整数，但self.x仍在增加，小数之间会产生进位，所以rect.x仍然增大
+		if self.moving_up and self.rect.top>self.screen_rect.top:
+			self.y-=self.settings.ship_speed
+		if self.moving_down and self.rect.bottom<self.screen_rect.bottom:
+			self.y+=self.settings.ship_speed
+		self.rect.y=self.y

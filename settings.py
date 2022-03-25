@@ -7,3 +7,4 @@ class Settings:
 		self.screen_width=1550
 		self.screen_height=800
 		self.bg_color=(230,230,230)
+		self.ship_speed=1.5 #设置一个速度，但是注意在rect属性中，rect.x不接受浮点数，所以要在ship.py 中处理
