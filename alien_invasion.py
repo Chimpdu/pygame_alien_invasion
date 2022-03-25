@@ -1,3 +1,4 @@
+#rebuild use _check_events(),_update_screen()
 import pygame
 import sys
 from settings import Settings
@@ -14,16 +15,23 @@ class AlienInvasion:
 		pygame.display.set_caption("Alien Invasion")
 
 	def run_game(self):
+		"""start the main loop"""
 		while True:
-			for event in pygame.event.get():
-				if event.type==pygame.QUIT:
-					sys.exit()
-			pygame.display.flip()
-			self.screen.fill(self.settings.bg_color)
-			self.ship.blitme()
+			self._check_events()
+			self._update_screen()
+
+	def _check_events(self):
+		"""response to the events"""
+		for event in pygame.event.get():
+			if event.type==pygame.QUIT:
+				sys.exit()
+
+	def _update_screen(self):
+		"""update the images on the screen and switch to new screens"""
+		pygame.display.flip()
+		self.screen.fill(self.settings.bg_color)
+		self.ship.blitme()
 
 if __name__=="__main__":
 	ai=AlienInvasion()
 	ai.run_game()
-import time
-time.sleep(10)
