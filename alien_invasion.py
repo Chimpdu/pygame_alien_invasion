@@ -11,7 +11,9 @@ class AlienInvasion:
 		"""initiate the game and build the assets"""
 		pygame.init()
 		self.settings=Settings()
-		self.screen=pygame.display.set_mode((self.settings.screen_width,self.settings.screen_height))
+		self.screen=pygame.display.set_mode((0,0),pygame.FULLSCREEN)  #使用(0,0),pygame.FULLSCREEN将游戏全屏播放
+		self.settings.screen_width=self.screen.get_rect().width       #更新Setting在主程序里使用的数据避免在直接引用setting.screen_XXX时出现错误
+		self.settings.screen_height=self.screen.get_rect().height
 		self.ship=Ship(self)
 		pygame.display.set_caption("Alien Invasion")
 
@@ -30,7 +32,6 @@ class AlienInvasion:
 				
 			elif event.type==pygame.KEYDOWN:
 				self._check_keydown_events(event)
-				
 
 			elif event.type==pygame.KEYUP:
 				self._check_keyup_events(event)
@@ -39,12 +40,15 @@ class AlienInvasion:
 		"""respond to the keydown events"""
 		if event.key==pygame.K_RIGHT:
 			self.ship.moving_right=True
-		if event.key==pygame.K_LEFT:
+		elif event.key==pygame.K_LEFT:
 			self.ship.moving_left=True
-		if event.key==pygame.K_UP:
+		elif event.key==pygame.K_UP:
 			self.ship.moving_up=True
-		if event.key==pygame.K_DOWN:
+		elif event.key==pygame.K_DOWN:
 			self.ship.moving_down=True
+		elif event.key==pygame.K_q:
+			sys.exit()
+
 
 	def _check_keyup_events(self,event):
 		"""respond to the keyup events"""
