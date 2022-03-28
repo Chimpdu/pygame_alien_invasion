@@ -24,8 +24,9 @@ class AlienInvasion:
 		while True:
 			self._check_events()
 			self._update_screen()
-			self.ship.update()
-			self.bullets.update() #编组会对每一个精灵（sprite）使用update
+			self._update_bullets()
+			
+			 
 
 	def _check_events(self):
 		"""response to the events"""
@@ -56,7 +57,7 @@ class AlienInvasion:
 		elif event.key==pygame.K_SPACE:
 			self._fire_bullet()
 
-	def _check_keyup_events(self,event):   #子弹不用设KEYUP是因为，一次空格这发射一次，不会出现止不住的情况
+	def _check_keyup_events(self,event):   
 		"""respond to the keyup events"""
 		if event.key==pygame.K_RIGHT:
 			self.ship.moving_right=False
@@ -69,16 +70,25 @@ class AlienInvasion:
 	
 	def _fire_bullet(self):
 		"""create a bullet and add it into the group"""
-		new_bullet=Bullet(self)
-		self.bullets.add(new_bullet)   #add类似于append只不过是pygame专用的
+		if len(self.bullets)<self.settings.bullet_num:
+			new_bullet=Bullet(self)
+			self.bullets.add(new_bullet)  
 
-	def _update_screen(self):   #新知识：要么#3在最前，#1，2按先1再2的顺序，要么#3再最后，按先1再2的顺序来不然ship显示不出来
+	def _update_screen(self):  
 		"""update the images on the screen and switch to new screens"""
 		pygame.display.flip()#3
 		self.screen.fill(self.settings.bg_color)#1
-		self.ship.blitme() #2        
-		for bullet in self.bullets.sprites():   #bullets.sprites()返回一个包含所有精灵的列表
+		self.ship.blitme() #2  
+		self.ship.update()      
+	
+	def _update_bullets(self):
+		self.bullets.update()
+		for bullet in self.bullets.sprites():  
 			bullet.draw_bullet()
+
+		for bullet in self.bullets.copy():      #用for循环删除列表或编组中的元素，必须要用副本，因为for必须遍历长度不变的列表或编组，除了pygame以外，通常用while来删除列表的元素，而不是for
+			if bullet.rect.bottom<0:            #循环用的列表是副本但是删除的是真的
+				self.bullets.remove(bullet)
 
 if __name__=="__main__":
 	ai=AlienInvasion()
