@@ -111,8 +111,10 @@ class AlienInvasion:
 		"""creat a single alien and add into the group"""
 		alien=Alien(self)
 		alien_width,alien_height=alien.rect.size
-		alien.rect.x=alien_width+2*alien_width*alien_num
-		alien.rect.y=alien_height+2*alien_height*num_row
+		alien.x=alien_width+2*alien_width*alien_num
+		alien.rect.x=alien.x
+		alien.y=alien_height+2*alien_height*num_row
+		alien.rect.y=alien.y
 		self.aliens.add(alien)                   
 
 if __name__=="__main__":
