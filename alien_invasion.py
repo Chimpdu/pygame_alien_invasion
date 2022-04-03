@@ -1,5 +1,3 @@
-#rebuild _check_events_()
-#As this program is growing increasingly complex, the method: _check_event_()would be longer and longer, so rebuild is desperatedly needed.
 import pygame
 import sys
 from settings import Settings
@@ -13,8 +11,8 @@ class AlienInvasion:
 		"""initiate the game and build the assets"""
 		pygame.init()
 		self.settings=Settings()
-		self.screen=pygame.display.set_mode((0,0),pygame.FULLSCREEN)  #使用(0,0),pygame.FULLSCREEN将游戏全屏播放
-		self.settings.screen_width=self.screen.get_rect().width       #更新Setting在主程序里使用的数据避免在直接引用setting.screen_XXX时出现错误
+		self.screen=pygame.display.set_mode((0,0),pygame.FULLSCREEN)  
+		self.settings.screen_width=self.screen.get_rect().width       
 		self.settings.screen_height=self.screen.get_rect().height
 		self.ship=Ship(self)
 		self.bullets=pygame.sprite.Group()   #创建用于存储子弹的编组
@@ -89,26 +87,33 @@ class AlienInvasion:
 		for bullet in self.bullets.sprites():  
 			bullet.draw_bullet()
 
-		for bullet in self.bullets.copy():      #用for循环删除列表或编组中的元素，必须要用副本，因为for必须遍历长度不变的列表或编组，除了pygame以外，通常用while来删除列表的元素，而不是for
-			if bullet.rect.bottom<0:            #循环用的列表是副本但是删除的是真的
+		for bullet in self.bullets.copy():    
+			if bullet.rect.bottom<0:
 				self.bullets.remove(bullet)
 
 	def _create_fleet(self):
 		"""creat the alien fleet"""
 		alien=Alien(self)
-		alien_width=alien.rect.width
-		available_space_x=self.settings.screen_width-(alien_width)
-		num_alien_x=available_space_x//(2*alien_width)                           
-		#这一步是创造一个alien实例但仅是为了计算num_alien_x，因此不会添加到编组（group）里。
-		for alien_num in range(num_alien_x):         #要注意range（n）,是循环n次，但是取值是0至n-1。
-			self._create_alien(alien_num)
+		alien_width,alien_height=alien.rect.size        #size提供一个元组   
+		available_space_x=(self.settings.screen_width-(alien_width))
+		num_alien_x=available_space_x//(2*alien_width) 
 
-	def _create_alien(self,alien_num):
+		ship_height=self.ship.rect.height
+		available_space_y=(self.settings.screen_height-(3*alien_height)-ship_height)
+		num_rows=available_space_y//(2*alien_height)                         
+		
+		for row_number in range(num_rows):          #这个太巧妙了
+			for alien_number in range(num_alien_x):
+				self._create_alien(alien_number,row_number)
+
+
+	def _create_alien(self,alien_num,num_row):
 		"""creat a single alien and add into the group"""
 		alien=Alien(self)
-		alien_width=alien.rect.width
+		alien_width,alien_height=alien.rect.size
 		alien.rect.x=alien_width+2*alien_width*alien_num
-		self.aliens.add(alien)                   #要注意range（n）,是循环n次，但是取值是0至n-1。构造函数时千万别错了
+		alien.rect.y=alien_height+2*alien_height*num_row
+		self.aliens.add(alien)                   
 
 if __name__=="__main__":
 	ai=AlienInvasion()
