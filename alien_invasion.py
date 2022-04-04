@@ -17,6 +17,7 @@ class AlienInvasion:
 		self.ship=Ship(self)
 		self.bullets=pygame.sprite.Group()   #创建用于存储子弹的编组
 		self.aliens=pygame.sprite.Group()
+		self._create_fleet() #千万别写在while里面，不然无限循环，会卡住
 		pygame.display.set_caption("Alien Invasion")
 
 	def run_game(self):
@@ -25,7 +26,7 @@ class AlienInvasion:
 			self._check_events()
 			self._update_screen()
 			self._update_bullets()	
-			self._create_fleet()		 
+					 
 
 	def _check_events(self):
 		"""response to the events"""
