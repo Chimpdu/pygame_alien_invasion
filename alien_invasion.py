@@ -136,6 +136,8 @@ class AlienInvasion:
 		"""update fleet's position"""
 		self._check_fleet_edges()
 		self.aliens.update()
+		collisions=pygame.sprite.groupcollide(
+			self.bullets,self.aliens,True,True)  #pygame.sprite.groupcollide将生成一个字典，键是self.bullets，值是self.aliens(在进行记分时也会用到)True代表碰撞后消除，False则不消除
 
 
 if __name__=="__main__":
