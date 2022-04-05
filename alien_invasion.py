@@ -26,6 +26,7 @@ class AlienInvasion:
 			self._check_events()
 			self._update_screen()
 			self._update_bullets()	
+			self._update_fleet()
 					 
 
 	def _check_events(self):
@@ -116,7 +117,26 @@ class AlienInvasion:
 		alien.rect.x=alien.x
 		alien.y=alien_height+2*alien_height*num_row
 		alien.rect.y=alien.y
-		self.aliens.add(alien)                   
+		self.aliens.add(alien)    
+
+	def _check_fleet_edges(self):
+		"""check the fleet's edges and change fleet_direction"""
+		for alien in self.aliens.sprites():
+			if alien.check_edges():
+				self._change_fleet_direction()
+				break
+
+	def _change_fleet_direction(self):
+		"""change the route of the aliens"""
+		for alien in self.aliens.sprites():
+			alien.rect.y+=self.settings.fleet_drop_speed
+			alien.fleet_direction*=-1
+
+	def _update_fleet(self):
+		"""update fleet's position"""
+		self._check_fleet_edges()
+		self.aliens.update()
+
 
 if __name__=="__main__":
 	ai=AlienInvasion()

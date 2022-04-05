@@ -15,3 +15,7 @@ class Settings:
 		self.bullet_heights=15
 		self.bullet_color=(60,60,60)
 		self.bullet_num=3
+		#fleet settings
+		self.fleet_speed=1.0
+		self.fleet_direction=1
+		self.fleet_drop_speed=10
