@@ -37,3 +37,9 @@ class Ship:
 		if self.moving_down and self.rect.bottom<self.screen_rect.bottom:
 			self.y+=self.settings.ship_speed
 		self.rect.y=self.y
+
+	def center_ship(self):
+		"""center the ship and reset self.x/y"""
+		self.rect.midbottom=self.screen_rect.midbottom
+		self.x=float(self.rect.x)
+		self.y=float(self.rect.y) #必须重置，不然self.x/y仍在撞击的位置。

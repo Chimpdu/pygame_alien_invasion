@@ -1,9 +1,11 @@
 import pygame
 import sys
+from time import sleep
 from settings import Settings
 from ship import Ship
 from bullet import Bullet
 from alien import Alien
+from game_stats import GameStats
 class AlienInvasion:
 	"""the class which administrates the games' asset and behaviour"""
 
@@ -19,15 +21,17 @@ class AlienInvasion:
 		self.aliens=pygame.sprite.Group()
 		self._create_fleet() #千万别写在while里面，不然无限循环，会卡住
 		pygame.display.set_caption("Alien Invasion")
+		self.stats=GameStats(self)
 
 	def run_game(self):
 		"""start the main loop"""
 		while True:
 			self._check_events()
 			self._update_screen()
-			self._update_bullets()	
-			self._update_fleet()
-					 
+			if self.stats.game_active:
+				self._update_bullets()	
+				self._update_fleet()
+			
 
 	def _check_events(self):
 		"""response to the events"""
@@ -109,7 +113,6 @@ class AlienInvasion:
 			for alien_number in range(num_alien_x):
 				self._create_alien(alien_number,row_number)
 
-
 	def _create_alien(self,alien_num,num_row):
 		"""creat a single alien and add into the group"""
 		alien=Alien(self)
@@ -137,7 +140,12 @@ class AlienInvasion:
 		"""update fleet's position"""
 		self._check_fleet_edges()
 		self.aliens.update()
-		
+
+		if pygame.sprite.spritecollideany(self.ship,self.aliens):
+			print("Ship hit!!!")
+			self._ship_hit()
+		self._check_aliens_bottom()
+
 	def _check_bullet_alien_collisions(self):
 			"""respond to collisions and rebuild fleet"""
 			collisions=pygame.sprite.groupcollide(
@@ -145,6 +153,27 @@ class AlienInvasion:
 			if not self.aliens:
 				self.bullets.empty()
 				self._create_fleet()
+
+	def _ship_hit(self):
+		"""respond to ship hit"""
+		if self.stats.ships_left>0:
+			self.stats.ships_left-=1
+			self.bullets.empty()
+			self.aliens.empty()
+			self._create_fleet()
+			self.ship.center_ship()
+			sleep(0.5)
+		else:
+			self.stats.game_active=False
+
+	def _check_aliens_bottom(self):
+		"""respond when aliens exceed the bottom of the screen"""
+		screen_rect=self.screen.get_rect()
+		for alien in self.aliens.sprites():
+			if alien.rect.bottom>=screen_rect.bottom:
+				self._ship_hit()
+				break
+
 
 if __name__=="__main__":
 	ai=AlienInvasion()

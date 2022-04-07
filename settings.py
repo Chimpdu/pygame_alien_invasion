@@ -9,6 +9,7 @@ class Settings:
 		self.bg_color=(230,230,230)
 		#ship settings
 		self.ship_speed=1.5 #设置一个速度，但是注意在rect属性中，rect.x不接受浮点数，所以要在ship.py 中处理
+		self.ship_limit=3
 		#bullet settings
 		self.bullet_speed=1.0
 		self.bullet_widths=3
