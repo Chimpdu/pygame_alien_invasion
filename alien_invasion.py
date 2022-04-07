@@ -92,6 +92,7 @@ class AlienInvasion:
 		for bullet in self.bullets.copy():    
 			if bullet.rect.bottom<0:
 				self.bullets.remove(bullet)
+		self._check_bullet_alien_collisions()
 
 	def _create_fleet(self):
 		"""creat the alien fleet"""
@@ -136,9 +137,14 @@ class AlienInvasion:
 		"""update fleet's position"""
 		self._check_fleet_edges()
 		self.aliens.update()
-		collisions=pygame.sprite.groupcollide(
+		
+	def _check_bullet_alien_collisions(self):
+			"""respond to collisions and rebuild fleet"""
+			collisions=pygame.sprite.groupcollide(
 			self.bullets,self.aliens,True,True)  #pygame.sprite.groupcollide将生成一个字典，键是self.bullets，值是self.aliens(在进行记分时也会用到)True代表碰撞后消除，False则不消除
-
+			if not self.aliens:
+				self.bullets.empty()
+				self._create_fleet()
 
 if __name__=="__main__":
 	ai=AlienInvasion()
