@@ -54,8 +54,15 @@ class AlienInvasion:
 
 	def _check_play_button(self,mouse_pos):
 		"""Start the game when clicking the play button"""
-		if self.play_button.rect.collidepoint(mouse_pos):#用rect的方法collidepoint检测返回的mouse_pos元组是不是在按钮内部
+		button_clicked=self.play_button.rect.collidepoint(mouse_pos)
+		if button_clicked and not self.stats.game_active:#避免在游戏进行时点击按钮区域也重置
+			self.stats.reset_stats()
 			self.stats.game_active=True
+			self.bullets.empty()
+			self.aliens.empty()
+			self._create_fleet()
+			self.ship.center_ship()
+			pygame.mouse.set_visible(False)
 					
 	def _check_keydown_events(self,event):
 		"""respond to the keydown events"""
@@ -179,6 +186,7 @@ class AlienInvasion:
 			sleep(0.5)
 		else:
 			self.stats.game_active=False
+			pygame.mouse.set_visible(True)
 
 	def _check_aliens_bottom(self):
 		"""respond when aliens exceed the bottom of the screen"""
