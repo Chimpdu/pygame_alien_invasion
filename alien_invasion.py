@@ -6,6 +6,7 @@ from ship import Ship
 from bullet import Bullet
 from alien import Alien
 from game_stats import GameStats
+from button import Button
 class AlienInvasion:
 	"""the class which administrates the games' asset and behaviour"""
 
@@ -19,9 +20,11 @@ class AlienInvasion:
 		self.ship=Ship(self)
 		self.bullets=pygame.sprite.Group()   #创建用于存储子弹的编组
 		self.aliens=pygame.sprite.Group()
+		self.play_button=Button(self,"Play")
 		self._create_fleet() #千万别写在while里面，不然无限循环，会卡住
 		pygame.display.set_caption("Alien Invasion")
 		self.stats=GameStats(self)
+
 
 	def run_game(self):
 		"""start the main loop"""
@@ -44,6 +47,15 @@ class AlienInvasion:
 
 			elif event.type==pygame.KEYUP:
 				self._check_keyup_events(event)
+
+			elif event.type==pygame.MOUSEBUTTONDOWN:
+				mouse_pos=pygame.mouse.get_pos() #返回一个Tuple，包含单击鼠标时的x,y坐标
+				self._check_play_button(mouse_pos)
+
+	def _check_play_button(self,mouse_pos):
+		"""Start the game when clicking the play button"""
+		if self.play_button.rect.collidepoint(mouse_pos):#用rect的方法collidepoint检测返回的mouse_pos元组是不是在按钮内部
+			self.stats.game_active=True
 					
 	def _check_keydown_events(self,event):
 		"""respond to the keydown events"""
@@ -75,11 +87,13 @@ class AlienInvasion:
 
 	def _update_screen(self):  
 		"""update the images on the screen and switch to new screens"""
-		pygame.display.flip()#3
-		self.screen.fill(self.settings.bg_color)#1
-		self.ship.blitme() #2  
+		pygame.display.flip()
+		self.screen.fill(self.settings.bg_color)
+		self.ship.blitme()   
 		self.ship.update() 
-		self.aliens.draw(self.screen)     
+		self.aliens.draw(self.screen) 
+		if not self.stats.game_active:
+			self.play_button.draw_button()
 	
 	def _fire_bullet(self):
 		"""create a bullet and add it into the group"""
