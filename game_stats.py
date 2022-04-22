@@ -2,7 +2,7 @@ class GameStats:
 	"""track the game's statistics"""
 
 	def __init__(self,ai_game):
-		"""initiate the statistics attributes"""
+		"""initialize the statistics attributes"""
 		self.settings=ai_game.settings
 		self.reset_stats()
 		self.game_active=False

@@ -4,7 +4,7 @@ class Ship:
 	"""a class for administrating the ship"""
 
 	def __init__(self,ai_game):
-		"""initiate the ship and set their original position"""
+		"""initialize the ship and set their original position"""
 		self.screen=ai_game.screen                  
 		self.screen_rect=ai_game.screen.get_rect()  
 

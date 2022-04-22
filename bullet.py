@@ -5,6 +5,7 @@ class Bullet(Sprite):          #class Bullet是Sprite的子类，不熟悉的话
 	"""a child class of Sprite which administrates the bullets"""
 	
 	def __init__(self,ai_game):
+		"""initialize the bullet"""
 		super().__init__()
 		self.settings=ai_game.settings
 		self.screen=ai_game.screen

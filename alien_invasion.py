@@ -11,7 +11,7 @@ class AlienInvasion:
 	"""the class which administrates the games' asset and behaviour"""
 
 	def __init__(self):
-		"""initiate the game and build the assets"""
+		"""initialize the game and build the assets"""
 		pygame.init()
 		self.settings=Settings()
 		self.screen=pygame.display.set_mode((0,0),pygame.FULLSCREEN)  
@@ -64,6 +64,7 @@ class AlienInvasion:
 			self._create_fleet()
 			self.ship.center_ship()
 			pygame.mouse.set_visible(False)
+			self.settings.initialize_dynamic_settings()
 					
 	def _check_keydown_events(self,event):
 		"""respond to the keydown events"""
@@ -131,7 +132,7 @@ class AlienInvasion:
 		available_space_y=(self.settings.screen_height-(3*alien_height)-ship_height)
 		num_rows=available_space_y//(2*alien_height)                         
 		
-		for row_number in range(num_rows):          #这个太巧妙了
+		for row_number in range(num_rows):         
 			for alien_number in range(num_alien_x):
 				self._create_alien(alien_number,row_number)
 
@@ -175,10 +176,11 @@ class AlienInvasion:
 			if not self.aliens:
 				self.bullets.empty()
 				self._create_fleet()
+				self.settings.increase_speed()
 
 	def _ship_hit(self):
 		"""respond to ship hit"""
-		if self.stats.ships_left>0:
+		if self.stats.ships_left>1:
 			self.stats.ships_left-=1
 			self.bullets.empty()
 			self.aliens.empty()

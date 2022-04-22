@@ -2,7 +2,7 @@ import pygame.font  #pygame.font是一个可以将文本渲染在屏幕上的模
 class Button:
 	"""a class used to administrate the buttons in the game"""
 	def __init__(self,ai_game,msg):       #msg是message，既按钮中要显示的文本
-		"""initiate the attributes of the button"""
+		"""initialize the attributes of the button"""
 		self.screen=ai_game.screen
 		self.screen_rect=ai_game.screen.get_rect()
 
