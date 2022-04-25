@@ -33,6 +33,4 @@ class Settings:
 		self.ship_speed*=self.speedup_scale
 		self.bullet_speed*=self.speedup_scale
 		self.fleet_speed*=self.speedup_scale
-		self.alien_points=int(self.score_scale*self.alien_points)
-		print(self.alien_points)
-		
+		self.alien_points=int(self.score_scale*self.alien_points)		
