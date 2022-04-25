@@ -7,6 +7,7 @@ from bullet import Bullet
 from alien import Alien
 from game_stats import GameStats
 from button import Button
+from scoreboard import Scoreboard
 class AlienInvasion:
 	"""the class which administrates the games' asset and behaviour"""
 
@@ -24,6 +25,7 @@ class AlienInvasion:
 		self._create_fleet() #千万别写在while里面，不然无限循环，会卡住
 		pygame.display.set_caption("Alien Invasion")
 		self.stats=GameStats(self)
+		self.sb=Scoreboard(self)
 
 
 	def run_game(self):
@@ -65,6 +67,7 @@ class AlienInvasion:
 			self.ship.center_ship()
 			pygame.mouse.set_visible(False)
 			self.settings.initialize_dynamic_settings()
+			self.sb.prep_score()
 					
 	def _check_keydown_events(self,event):
 		"""respond to the keydown events"""
@@ -100,7 +103,8 @@ class AlienInvasion:
 		self.screen.fill(self.settings.bg_color)
 		self.ship.blitme()   
 		self.ship.update() 
-		self.aliens.draw(self.screen) 
+		self.aliens.draw(self.screen)
+		self.sb.show_score() 
 		if not self.stats.game_active:
 			self.play_button.draw_button()
 	
@@ -172,10 +176,14 @@ class AlienInvasion:
 	def _check_bullet_alien_collisions(self):
 			"""respond to collisions and rebuild fleet"""
 			collisions=pygame.sprite.groupcollide(
-			self.bullets,self.aliens,True,True)  #pygame.sprite.groupcollide将生成一个字典，键是self.bullets，值是self.aliens(在进行记分时也会用到)True代表碰撞后消除，False则不消除
+			self.bullets,self.aliens,True,True)  
+			if collisions:
+				for aliens in collisions.values():
+					self.stats.score+=len(aliens)*self.settings.alien_points
+					self.sb.prep_score()
 			if not self.aliens:
 				self.bullets.empty()
-				self._create_fleet()
+				self._create_fleet() 
 				self.settings.increase_speed()
 
 	def _ship_hit(self):
