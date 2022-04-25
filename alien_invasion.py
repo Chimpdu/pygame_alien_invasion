@@ -192,7 +192,8 @@ class AlienInvasion:
 	def _ship_hit(self):
 		"""respond to ship hit"""
 		if self.stats.ships_left>1:
-			self.stats.ships_left-=1
+			self.stats.ships_left-=1 
+			self.sb.prep_ship()
 			self.bullets.empty()
 			self.aliens.empty()
 			self._create_fleet()
