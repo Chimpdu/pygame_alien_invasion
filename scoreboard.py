@@ -13,6 +13,7 @@ class Scoreboard:
 		self.font=pygame.font.SysFont(None,48)
 		#prepare the image
 		self.prep_score()
+		self.prep_highest_score()
 
 	def prep_score(self):
 		"""turn the text into image"""
@@ -23,6 +24,16 @@ class Scoreboard:
 		self.rect.right=self.screen_rect.right-20
 		self.rect.top=20
 
+	def prep_highest_score(self):
+		"""the the text of highest score into image"""
+		rounded_highest_score=round(self.stats.highest_score,-1)
+		content_highest_score="{:,}".format(rounded_highest_score)
+		self.highest_score_image=self.font.render(content_highest_score,True,self.text_color,self.settings.bg_color)
+		self.highest_score_rect=self.highest_score_image.get_rect()
+		self.highest_score_rect.centerx=self.screen_rect.centerx
+		self.highest_score_rect.top=self.rect.top
+
 	def show_score(self):
 		"""print the scoreboard on the screen"""
 		self.screen.blit(self.font_image,self.rect)
+		self.screen.blit(self.highest_score_image,self.highest_score_rect)

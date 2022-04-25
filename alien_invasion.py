@@ -181,6 +181,7 @@ class AlienInvasion:
 				for aliens in collisions.values():
 					self.stats.score+=len(aliens)*self.settings.alien_points
 					self.sb.prep_score()
+					self._check_highest_score()
 			if not self.aliens:
 				self.bullets.empty()
 				self._create_fleet() 
@@ -206,6 +207,12 @@ class AlienInvasion:
 			if alien.rect.bottom>=screen_rect.bottom:
 				self._ship_hit()
 				break
+
+	def _check_highest_score(self):
+		"""update the highest score"""
+		if self.stats.score>self.stats.highest_score:
+			self.stats.highest_score=self.stats.score
+			self.sb.prep_highest_score()
 
 
 if __name__=="__main__":
