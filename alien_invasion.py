@@ -186,6 +186,8 @@ class AlienInvasion:
 				self.bullets.empty()
 				self._create_fleet() 
 				self.settings.increase_speed()
+				self.stats.level+=1
+				self.sb.prep_level( )
 
 	def _ship_hit(self):
 		"""respond to ship hit"""

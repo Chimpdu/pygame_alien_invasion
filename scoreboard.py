@@ -14,6 +14,7 @@ class Scoreboard:
 		#prepare the image
 		self.prep_score()
 		self.prep_highest_score()
+		self.prep_level()
 
 	def prep_score(self):
 		"""turn the text into image"""
@@ -33,7 +34,16 @@ class Scoreboard:
 		self.highest_score_rect.centerx=self.screen_rect.centerx
 		self.highest_score_rect.top=self.rect.top
 
+	def prep_level(self):
+		"""turn level into image"""
+		content_level="Level:"+str(self.stats.level)
+		self.level_image=self.font.render(content_level,True,self.text_color,self.settings.bg_color)
+		self.level_rect=self.level_image.get_rect()
+		self.level_rect.right=self.rect.right
+		self.level_rect.top=self.rect.bottom+20
+
 	def show_score(self):
 		"""print the scoreboard on the screen"""
 		self.screen.blit(self.font_image,self.rect)
 		self.screen.blit(self.highest_score_image,self.highest_score_rect)
+		self.screen.blit(self.level_image,self.level_rect)
